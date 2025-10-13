@@ -1,0 +1,5 @@
+src/config/firebaseServiceKey.json
+src/config/GoogleVisionKey.json
+.env
+/uploads
+node_modules
