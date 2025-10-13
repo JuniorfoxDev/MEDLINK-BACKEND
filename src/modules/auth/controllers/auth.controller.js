@@ -14,12 +14,19 @@ const { autoVerifyID } = require("../../../utils/VerifyAuto"); // optional (Goog
 // 🔥 FIREBASE SETUP
 // =============================
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_KEY || "{}");
-
-  // Fix private_key newlines for safety
-  if (serviceAccount.private_key) {
-    serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-  }
+  const serviceAccount = {
+    type: "service_account",
+    project_id: "medlink-c0351",
+    private_key_id: "fd214a7c533bc86f8eae8ad52c7ba632f0c69399",
+    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: "firebase-adminsdk-fbsvc@medlink-c0351.iam.gserviceaccount.com",
+    client_id: "104417516469944175157",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40medlink-c0351.iam.gserviceaccount.com",
+    universe_domain: "googleapis.com"
+  };
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -27,7 +34,6 @@ if (!admin.apps.length) {
 
   console.log("✅ Firebase Admin Initialized Successfully");
 }
-
 // =============================
 // 🔐 Helper: Generate JWT
 // =============================
