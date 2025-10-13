@@ -14,10 +14,11 @@ const { autoVerifyID } = require("../../../utils/VerifyAuto"); // optional (Goog
 // 🔥 FIREBASE SETUP
 // =============================
 if (!admin.apps.length) {
-  const firebaseConfig = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_KEY || "{}");
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  credential: admin.credential.cert(serviceAccount),
+});
+
 }
 
 // =============================
