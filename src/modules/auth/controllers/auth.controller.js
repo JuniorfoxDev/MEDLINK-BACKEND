@@ -33,8 +33,7 @@ if (!admin.apps.length) {
   console.log("✅ Firebase Admin Initialized Successfully");
 }
 
-  console.log("✅ Firebase Admin Initialized Successfully");
-}
+ 
 // =============================
 // 🔐 Helper: Generate JWT
 // =============================
