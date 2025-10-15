@@ -24,7 +24,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:5173",
   "https://medlink-frontend-4t49-dmzbgsaxu-juniorfoxdevs-projects.vercel.app",
-  "https://medlink-frontend-4t49-dmzbgsaxu-juniorfoxdevs-projects.vercel.app"
+  "https://medlink-frontend-4t49-dmzbgsaxu-juniorfoxdevs-projects.vercel.app",
   "https://medlink-frontend.vercel.app",
   "http://localhost:3000",
 ];
