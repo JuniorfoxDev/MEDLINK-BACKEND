@@ -20,11 +20,21 @@ const app = require("./app");
 // ⚙️ Create HTTP Server
 const server = http.createServer(app);
 
-// ⚡ Initialize Socket.IO
+// ✅ Define allowed origins for Socket.io + CORS
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:5173",
+  "https://medlink-frontend-4t49-dmzbgsaxu-juniorfoxdevs-projects.vercel.app",
+  "https://medlink-frontend-4t49-dmzbgsaxu-juniorfoxdevs-projects.vercel.app"
+  "https://medlink-frontend.vercel.app",
+  "http://localhost:3000",
+];
+
+// ⚡ Initialize Socket.IO with secure CORS config
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "*",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   },
 });
 
@@ -39,8 +49,10 @@ io.on("connection", (socket) => {
 
   // ✅ Register user when frontend connects (each user joins their own room)
   socket.on("registerUser", (userId) => {
-    socket.join(userId); // join personal notification room
-    console.log(`👤 User registered in room: ${userId}`);
+    if (userId) {
+      socket.join(userId.toString());
+      console.log(`👤 User joined their personal room: ${userId}`);
+    }
   });
 
   // 💬 Typing indicators (for chat, optional)
@@ -48,14 +60,33 @@ io.on("connection", (socket) => {
   socket.on("stopTyping", (payload) => io.emit("stopTyping", payload));
 
   // 📰 Real-time post updates (like, comment, delete)
-  socket.on("postUpdated", (post) => io.emit("postUpdated", post));
-  socket.on("postDeleted", (id) => io.emit("postDeleted", id));
+  socket.on("postLiked", (data) => {
+    // { postId, likedBy, ownerId }
+    console.log(`❤️ Post liked by ${data.likedBy}`);
+    io.to(data.ownerId).emit("notification", {
+      type: "like",
+      message: `${data.likedByName} liked your post.`,
+      postId: data.postId,
+    });
+  });
 
-  // 🧩 Real-time notifications (connection requests, likes, etc.)
+  socket.on("postCommented", (data) => {
+    // { postId, commentBy, ownerId, commentText }
+    console.log(`💬 Comment added by ${data.commentBy}`);
+    io.to(data.ownerId).emit("notification", {
+      type: "comment",
+      message: `${data.commentByName} commented on your post.`,
+      postId: data.postId,
+    });
+  });
+
+  // 🧩 Real-time connection requests
   socket.on("sendNotification", (data) => {
     // data = { toUserId, notification }
-    console.log(`📨 Notification sent to: ${data.toUserId}`);
-    io.to(data.toUserId).emit("notification", data.notification);
+    if (data?.toUserId) {
+      console.log(`📨 Sending notification to: ${data.toUserId}`);
+      io.to(data.toUserId.toString()).emit("notification", data.notification);
+    }
   });
 
   // ❌ Disconnect event
@@ -74,8 +105,9 @@ app.use(errorHandler);
 // ================================
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log("====================================");
-  console.log(`🚀 MediLink backend running at: http://localhost:${PORT}`);
+  console.log(`🚀 MediLink backend running on: http://localhost:${PORT}`);
+  console.log(`🌐 Accessible at: ${process.env.FRONTEND_URL || "default"}`);
   console.log("====================================");
 });
