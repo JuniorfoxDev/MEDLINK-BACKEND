@@ -5,24 +5,25 @@ const fs = require("fs");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const admin = require("firebase-admin");
-const cloudinary = require("../../../config/cloudinary"); // ✅ Added
+const cloudinary = require("../../../config/cloudinary"); 
 const User = require("../models/user.model");
 const VerificationToken = require("../models/verificationToken.model");
-const { autoVerifyID } = require("../../../utils/VerifyAuto"); // optional (Google Vision)
+const { autoVerifyID } = require("../../../utils/VerifyAuto");
 
 // =============================
 // 🔥 FIREBASE SETUP
 // =============================
 if (!admin.apps.length) {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+  // ✅ Replace literal \n with real newlines
   serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
-
-  console.log("✅ Firebase Admin Initialized Successfully");
-}// =============================
+}
+// =============================
 // 🔐 Helper: Generate JWT
 // =============================
 const generateToken = (id) =>
