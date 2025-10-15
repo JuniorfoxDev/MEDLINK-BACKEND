@@ -9,20 +9,34 @@ const app = express();
 // ================================
 // 🛡️ CORS Configuration (Fix for Render + Vercel)
 // ================================
+import cors from "cors";
+
 const allowedOrigins = [
   "http://localhost:5173", // local dev
-  "https://medlink-frontend.vercel.app",
-  "https://medlink-frontend-4t49.vercel.app/",
+  "https://medlink-prod.vercel.app", // main production
   "https://medlink-production.vercel.app",
-  "https://medlink-frontend-4t49-quxbj2kmd-juniorfoxdevs-projects.vercel.app",
-  "https://medlink-prod.vercel.app",
-  "https://medlink-frontend-4t49-307czvbwn-juniorfoxdevs-projects.vercel.app", // your actual deployed frontend
 ];
 
+// ✅ Custom CORS logic
 app.use(
   cors({
-    origin: "*",
-    credentials: true, // ✅ required if you ever send auth cookies
+    origin: function (origin, callback) {
+      // Allow REST tools & server-to-server (no origin)
+      if (!origin) return callback(null, true);
+
+      // ✅ Allow all vercel.app subdomains (even random preview URLs)
+      const hostname = new URL(origin).hostname;
+      if (
+        allowedOrigins.includes(origin) ||
+        hostname.endsWith(".vercel.app")
+      ) {
+        return callback(null, true);
+      }
+
+      // ❌ Otherwise reject
+      return callback(new Error("Not allowed by CORS: " + origin));
+    },
+    credentials: true, // ✅ allows cookies/tokens
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
