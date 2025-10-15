@@ -13,6 +13,7 @@ const allowedOrigins = [
   "http://localhost:5173", // local dev
   "https://medlink-frontend.vercel.app",
   "https://medlink-frontend-4t49.vercel.app/",
+  "https://medlink-production.vercel.app",
   "https://medlink-prod.vercel.app",
   "https://medlink-frontend-4t49-307czvbwn-juniorfoxdevs-projects.vercel.app", // your actual deployed frontend
 ];
