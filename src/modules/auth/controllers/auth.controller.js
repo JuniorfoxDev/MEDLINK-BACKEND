@@ -14,14 +14,19 @@ const { autoVerifyID } = require("../../../utils/VerifyAuto");
 // 🔥 FIREBASE SETUP
 // =============================
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        project_id: process.env.FIREBASE_PROJECT_ID,
+        client_email: process.env.FIREBASE_CLIENT_EMAIL,
+        private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      }),
+    });
 
-  // ✅ Replace literal \n with real newlines
-  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+    console.log("🔥 Firebase initialized successfully!");
+  } catch (error) {
+    console.error("❌ Firebase initialization failed:", error.message);
+  }
 }
 // =============================
 // 🔐 Helper: Generate JWT
