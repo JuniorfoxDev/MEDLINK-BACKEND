@@ -14,6 +14,7 @@ const allowedOrigins = [
   "https://medlink-frontend.vercel.app",
   "https://medlink-frontend-4t49.vercel.app/",
   "https://medlink-production.vercel.app",
+  "https://medlink-frontend-4t49-quxbj2kmd-juniorfoxdevs-projects.vercel.app",
   "https://medlink-prod.vercel.app",
   "https://medlink-frontend-4t49-307czvbwn-juniorfoxdevs-projects.vercel.app", // your actual deployed frontend
 ];
