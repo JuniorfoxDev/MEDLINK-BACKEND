@@ -15,6 +15,9 @@ const allowedOrigins = [
   "http://localhost:5173", // local dev
   "https://medlink-prod.vercel.app", // main production
   "https://medlink-production.vercel.app",
+  "https://probable-memory-qxvp69x649v367g4-5173.app.github.dev/" // github production
+  ,
+
 ];
 
 // ✅ Custom CORS logic
