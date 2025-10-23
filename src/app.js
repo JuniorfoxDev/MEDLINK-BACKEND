@@ -15,8 +15,7 @@ const allowedOrigins = [
   "http://localhost:5173", // local dev
   "https://medlink-prod.vercel.app", // main production
   "https://medlink-production.vercel.app",
-  "https://probable-memory-qxvp69x649v367g4-5173.app.github.dev/" // github production
-  ,
+  "https://probable-memory-qxvp69x649v367g4-5173.app.github.dev", // github production
 
 ];
 
@@ -60,7 +59,8 @@ const postRoutes = require("./modules/post/routes/post.routes");
 const jobRoutes = require("./modules/job/routes/job.routes");
 const userRoutes = require("./modules/userProfile/userProfile.routes");
 const notificationRoutes = require("./modules/notification/routes/notification.routes");
-
+const chatRoutes = require("./modules/chat/routes/chat.routes");
+const messageRoutes = require("./modules/chat/routes/message.routes");
 // ================================
 // 🛠 Mount Routes
 // ================================
@@ -69,7 +69,8 @@ app.use("/api/posts", postRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notifications", notificationRoutes);
-
+app.use("/api/chats",chatRoutes);
+app.use("/api/messages",messageRoutes)
 // 📁 Serve uploaded media files (images, profile pics)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

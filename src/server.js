@@ -51,7 +51,10 @@ io.on("connection", (socket) => {
     socket.join(userId);
     console.log(`👤 User registered in room: ${userId}`);
   });
-
+  socket.on("joinChat", (chatId) => socket.join(chatId));
+  socket.on("sendMessage", (msg) => {
+    io.to(msg.chat).emit("newMessage", msg);
+  });
   // 💬 Typing indicators
   socket.on("typing", (payload) => io.emit("typing", payload));
   socket.on("stopTyping", (payload) => io.emit("stopTyping", payload));
