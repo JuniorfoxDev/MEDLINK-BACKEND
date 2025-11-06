@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Chat = require("../../chat/models/chat.model");
 const Message = require("../../chat/models/message.model");
-const { authMiddleware } = require("../../middlewares/auth.middleware");
-
+// const { auth } = require("../../../middlewares/auth.middleware");
+const auth = require("../.../../../../middlewares/auth.middleware");
 // 🆕 Create or get existing chat
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", auth , async (req, res) => {
   try {
     const { userId } = req.body;
     const existing = await Chat.findOne({
