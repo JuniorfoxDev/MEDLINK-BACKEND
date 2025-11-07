@@ -16,7 +16,7 @@ const allowedOrigins = [
   "https://medlink-prod.vercel.app", // main production
   "https://medlink-production.vercel.app",
   "https://probable-memory-qxvp69x649v367g4-5173.app.github.dev", // github production
-
+  "http://127.0.0.1:5173",
 ];
 
 // ✅ Custom CORS logic

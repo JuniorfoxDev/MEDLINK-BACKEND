@@ -27,6 +27,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://medlink-frontend.vercel.app",
   "https://medlink-frontend-4t49-307czvbwn-juniorfoxdevs-projects.vercel.app",
+  "http://127.0.0.1:5173",
 ];
 
 const io = new Server(server, {
@@ -46,34 +47,54 @@ app.set("io", io);
 io.on("connection", (socket) => {
   console.log(`🟢 Socket connected: ${socket.id}`);
 
-  // ✅ Register user (each joins their own room)
+  // ✅ Each logged-in user joins their personal notification room
   socket.on("registerUser", (userId) => {
     socket.join(userId);
     console.log(`👤 User registered in room: ${userId}`);
   });
-  socket.on("joinChat", (chatId) => socket.join(chatId));
-  socket.on("sendMessage", (msg) => {
-    io.to(msg.chat).emit("newMessage", msg);
-  });
-  // 💬 Typing indicators
-  socket.on("typing", (payload) => io.emit("typing", payload));
-  socket.on("stopTyping", (payload) => io.emit("stopTyping", payload));
 
-  // 📰 Real-time post updates (like/comment/delete)
+  // ✅ Join a specific chat room (for private chat)
+  socket.on("joinChat", (chatId) => {
+    socket.join(chatId);
+    console.log(`💬 Joined chat room: ${chatId}`);
+  });
+
+  // ✅ Send message within chat room (real-time)
+  socket.on("sendMessage", (msg) => {
+    console.log(`📨 Message sent to chat: ${msg.chat}`);
+    io.to(msg.chat).emit("newMessage", msg); // broadcast only to that room
+  });
+
+  // ✅ Typing indicators (real-time)
+  socket.on("typing", ({ chatId, from }) => {
+    io.to(chatId).emit("typing", { chatId, from });
+  });
+
+  socket.on("stopTyping", ({ chatId, from }) => {
+    io.to(chatId).emit("stopTyping", { chatId, from });
+  });
+
+  // ✅ “Seen” message event
+  socket.on("messageSeen", ({ chatId }) => {
+    io.to(chatId).emit("messageSeen", { chatId });
+  });
+
+  // ✅ Real-time post updates (like/comment/delete)
   socket.on("postUpdated", (post) => io.emit("postUpdated", post));
   socket.on("postDeleted", (id) => io.emit("postDeleted", id));
 
-  // 🧩 Real-time notifications (connection requests, likes, etc.)
+  // ✅ Real-time notifications (connection requests, likes, etc.)
   socket.on("sendNotification", (data) => {
     console.log(`📨 Notification sent to: ${data.toUserId}`);
     io.to(data.toUserId).emit("notification", data.notification);
   });
 
-  // ❌ Disconnect event
+  // ✅ Clean disconnection
   socket.on("disconnect", () => {
     console.log(`🔴 Socket disconnected: ${socket.id}`);
   });
 });
+
 
 // ================================
 // ⚠️ Global Error Handler

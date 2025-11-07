@@ -3,9 +3,25 @@ const mongoose = require("mongoose");
 const chatSchema = new mongoose.Schema(
   {
     participants: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
     ],
-    lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
+    status: {
+      type: String,
+      enum: ["pending", "active"],
+      default: "pending",
+    },
+    requestedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    lastMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
+    },
   },
   { timestamps: true }
 );

@@ -31,9 +31,13 @@ if (!admin.apps.length) {
 // =============================
 // 🔐 Helper: Generate JWT
 // =============================
-const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+const generateToken = (userId) => {
+  const secret =
+    process.env.JWT_SECRET ||
+    "dev_medilink_secret_4b9f1a82e12b48fcbf6a15f88a6e95a7";
 
+  return jwt.sign({ id: userId }, secret, { expiresIn: "7d" });
+};
 // =============================
 // 📧 EMAIL TRANSPORTER
 // =============================

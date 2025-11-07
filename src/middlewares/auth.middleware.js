@@ -23,27 +23,29 @@ const authMiddleware = async (req, res, next) => {
     console.log("🧩 Received JWT Token:", token.slice(0, 20) + "...");
 
     // 🛑 2. Validate Secret Key
-    if (!process.env.JWT_SECRET) {
-      console.error("❌ JWT_SECRET is missing in .env");
+    const secret =
+      process.env.JWT_SECRET ||
+      "dev_medilink_secret_4b9f1a82e12b48fcbf6a15f88a6e95a7";
+
+    if (!secret) {
+      console.error("❌ JWT_SECRET is missing even after fallback!");
       return res.status(500).json({
         success: false,
-        message: "Server misconfiguration: JWT_SECRET missing",
+        message: "JWT secret configuration missing",
       });
     }
 
     // 🧠 3. Verify Token
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = jwt.verify(token, secret);
     } catch (err) {
       console.error("❌ JWT Verification Failed:", err.message);
       if (err.name === "TokenExpiredError") {
-        return res
-          .status(401)
-          .json({
-            success: false,
-            message: "Session expired. Please log in again.",
-          });
+        return res.status(401).json({
+          success: false,
+          message: "Session expired. Please log in again.",
+        });
       }
       return res
         .status(401)

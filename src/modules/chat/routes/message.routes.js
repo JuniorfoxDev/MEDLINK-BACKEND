@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Message = require("../../chat/models/message.model");
 const Chat = require("../../chat/models/chat.model");
-const { authMiddleware } = require("../../middlewares/auth.middleware");
-
+// const { authMiddleware } = require("../../middlewares/auth.middleware");
+const auth = require("../.../../../../middlewares/auth.middleware");
 // ✉️ Send message
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const { chatId, text } = req.body;
     const message = await Message.create({
@@ -29,7 +29,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // 📜 Get messages by chatId
-router.get("/:chatId", authMiddleware, async (req, res) => {
+router.get("/:chatId", auth, async (req, res) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId }).populate(
       "sender",
