@@ -60,7 +60,7 @@ const jobRoutes = require("./modules/job/routes/job.routes");
 const userRoutes = require("./modules/userProfile/userProfile.routes");
 const notificationRoutes = require("./modules/notification/routes/notification.routes");
 const chatRoutes = require("./modules/chat/routes/chat.routes");
-const messageRoutes = require("./modules/chat/routes/message.routes");
+// const messageRoutes = require("./modules/chat/routes/message.routes");
 // ================================
 // 🛠 Mount Routes
 // ================================
@@ -69,8 +69,8 @@ app.use("/api/posts", postRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/chats",chatRoutes);
-app.use("/api/messages",messageRoutes)
+app.use("/api/chat",chatRoutes);
+
 // 📁 Serve uploaded media files (images, profile pics)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

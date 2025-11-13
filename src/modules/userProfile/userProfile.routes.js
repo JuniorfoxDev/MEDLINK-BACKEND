@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../../modules/auth/models/user.model");
 const auth = require("../../middlewares/auth.middleware");
 const Notification = require("../notification/models/notification.model");
-const Chat = require("../chat/models/chat.model"); // ✅ Chat model import
+const Chat = require("../chat/models/conversation.model"); // ✅ Chat model import
 
 // ✅ Get all users except logged-in user
 router.get("/", auth, async (req, res) => {

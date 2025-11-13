@@ -53,17 +53,15 @@ io.on("connection", (socket) => {
     console.log(`👤 User registered in room: ${userId}`);
   });
 
-  // ✅ Join a specific chat room (for private chat)
-  socket.on("joinChat", (chatId) => {
-    socket.join(chatId);
-    console.log(`💬 Joined chat room: ${chatId}`);
+  socket.on("joinConversation", (conversationId) => {
+    socket.join(conversationId);
+    console.log(`socket ${socket.id} joined convo ${conversationId}`);
   });
 
-  // ✅ Send message within chat room (real-time)
-  socket.on("sendMessage", (msg) => {
-    console.log(`📨 Message sent to chat: ${msg.chat}`);
-    io.to(msg.chat).emit("newMessage", msg); // broadcast only to that room
+  socket.on("leaveConversation", (conversationId) => {
+    socket.leave(conversationId);
   });
+
 
   // ✅ Typing indicators (real-time)
   socket.on("typing", ({ chatId, from }) => {
