@@ -28,6 +28,7 @@ const allowedOrigins = [
   "https://medlink-frontend.vercel.app",
   "https://medlink-frontend-4t49-307czvbwn-juniorfoxdevs-projects.vercel.app",
   "http://127.0.0.1:5173",
+  "https://medlink-prod.vercel.app/", 
 ];
 
 const io = new Server(server, {
